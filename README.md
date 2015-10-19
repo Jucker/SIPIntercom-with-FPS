@@ -10,9 +10,14 @@ This application use the liblinphone library for the SIP client.
 http://www.linphone.org/technical-corner/liblinphone/overview
 Documentation for this library is available at:
 http://pythonhosted.org/linphone/
-But beware ! It seems some information are missing ! Some function are not described in this documentation.
+But beware ! It seems some informations are missing ! Some function are not described in this documentation.
 
 GT511C3 offical page with datasheet:
 http://www.adh-tech.com.tw/?9,gt-511c3-gt-511c31-%28uart%29
 The original python library for the GT511C3 finger print reader is pyGT511C3 from the user jeanmachuca
 https://github.com/QuickGroup/pyGT511C3
+
+I have add some modifications to the original FPS library to imporve it and resolve some issues.
+
+A short manual (in french) is available in this repository
+The full documentation (in french) is available in this repository
