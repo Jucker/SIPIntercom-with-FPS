@@ -36,3 +36,4 @@ Known issues:
 - SIP client dosen't encrypt video stream when using the ZRTP parameter (encrypt only audio RTP paquet) in the call.conf file. Use SRTP parameter with TLS encryption for SIP frames to perform full security call.
 - SIP client send burst of REGISTER when the parameter Config_log: is set to True in the call.conf file, unknown reason
 - The threading/process management probably need some improvement. 
+- Due to the free id research mechanism during the enrollement process the enrollement process could be a bit long when the system as a lot of template stored or when some id has been erased.
