@@ -1,0 +1,80 @@
+Descriptifs des fonctions
+-------------------------
+openDoor():
+Fonction assurant l’ouverture de la porte en passant la sortie d’alimentation du relais de la gâche à l’état haut. La valeur est remise à l’état bas après 5 secondes.
+Ne retourne rien
+
+ringbell(*args):
+Crée un appel avec la méthode makeCall() de la classe ClientSip. Appel ensuite la fonction dtmfCollection().
+Ne retourne rien.
+
+dtmfCollection():
+Récupère les codes DTMF durant l'appel. Les codes proviennent de la liste ClientSip.dtmf_list. Construit un string de 4 chiffres. Appel la fonction passewordTest().
+Ne retourne rien.
+
+passwordTest(dtmf_string) :
+Compare le string construit par la fonction dtmfCollection() avec le mot de passe spécifié dans le fichier de configuration. En cas de concordance appel la fonction openDoor(). Compte le nombre de tentatives. En cas de 3 échecs consécutifs termine l’appel.
+Ne retourne rien
+
+initiateFps() :
+Fonction servant à initialiser le FPS selon la méthode décrite au chapitre « Problèmes rencontrés » de  « Intégration du lecteur d’empreinte ».
+Retourne un objet FPS_GT511C3.
+
+menu():
+Fonction de création du menu. Exécute certaines instructions en fonction du choix de l’utilisateur.
+			Menu du portier
+			===================================
+			1 : Enregistrer une empreinte
+			2 : Supprimer une empreinte
+			3 : Mettre le portier en exploitation
+			4 : Informations
+			5 : Quitter
+
+L’entrée 1 appel la fonction enroll(). L’entrée 2 permet de supprimer des entrées dans la base de données du FPS. L’entrée 3 appel la fonction identification() dans un autre thread. L’entrée 4 est prévue pour afficher des informations (vide actuellement). En finalement l’entrée 5 permet de quitter le programme en fermant la connexion au FPS, en arrêtant la fonction iterate du client SIP et en réinitialisant les GPIO.
+Une interruption du programme par l’exception keyboardInterrupt produit les mêmes effets que la cinquième entrée du menu.
+
+Mise en service
+---------------
+Assembler les éléments selon le schéma. 
+Copier les fichiers dans un répertoire.
+main.py
+functions.py
+FPS.py
+ClientSip.py
+Input.py
+Output.py
+call.conf
+
+Le fichier main.py doit être rendu exécutable avec la commande  
+
+		sudo chmod +x /user/dossier/main.py 
+
+Installation de la librairie liblinphone 3.8.0 python suivant les instructions données sur https://wiki.linphone.org/wiki/index.php/Raspberrypi:start
+Installation et test de la caméra selon les instructions données sur https://www.raspberrypi.org/documentation/configuration/camera.md
+Connexion et test de la carte son USB de HEXIN ; plug and play.
+Modification du fichier etc/modules (modules du noyau chargés au démarrage) afin d’ajouter « bcm2835-v4l2 » 
+Installer la librairie RPi.GPIO avec la commande 
+sudo apt-get install Rpi.GPIO
+
+Désactiver l’utilisation de l’UART par le noyau linux selon les instructions sur le site de elinux.org ; http://elinux.org/RPi_Serial_Connection au chapitre « Connection to a microcontroller or other peripheral ».
+Installer le module pyserial pour python selon la marche à suivre disponible par exemple à l’adresse : https://www.raspberrypi.org/forums/viewtopic.php?f=5&t=5938
+Editer le fichier call.conf en fonction de l’adresse du proxy, du mot de passe et de l’adresse à atteindre par la fonction d’appel et des préférences cryptographiques. Le mot de passe par défaut pour l’ouverture de la porte par code DTMF doit être changé.
+Afin d’obtenir la liste et l’adresse des périphériques audio et vidéo susceptibles d’être utilisés par le portier le paramètre test_périphériques de la section périphérique doit être mis à True. La fonction deviceCheck() affichera alors ces informations dans la console durant l’exécution du fichier main.py.
+Exécuter le fichier main.py en mode sudo. Comme ce dernier utilise les GPIO il doit pouvoir accéder directement à la mémoire, privilège des comptes avec droit administrateur. Lors de la première exécution du script après la mise sous tension du FPS, une exception est levée par l’interpréteur qui entraine l’arrêt de l’exécution du script. Ré-exécuter le script.
+
+Enrôlement et mise en exploitation
+----------------------------------
+Le menu permet d’effectuer les actions nécessaires à l’exploitation du portier. L’entrée «Enregistrer une empreinte » permet de réaliser l’enrôlement d’un utilisateur autorisé à ouvrir la porte. Les instructions de la procédure sont données dans la console. Le numéro sous lequel l’utilisateur est enregistré doit être noté et conservé, c’est le numéro sous lequel il sera connu du portier.
+L’entrée « Supprimer une empreinte » permet de supprimer l’enrôlement d’un utilisateur en spécifiant son numéro. La valeur -1 efface l’intégralité des utilisateurs.
+L’entrée « Mettre le portier en exploitation » permet de mettre le portier en exploitation. Dans cet état il attend l’apposition d’un doigt afin de le comparer avec sa base de données. En cas de comparaison positive le portier commande l’ouverture de la porte. Pour quitter le mode exploitation pressez ctrl + q, dans ce cas le fichier main.py doit être ré-exécuter pour accéder au menu.
+L’entrée « informations » n’est pas utilisée
+La dernière entrée quitte le programme. Tous les utilisateurs restent enregistrés dans la base de données du lecteur d’empreintes.
+
+Utilisation
+------------
+Une fois en mode exploitation le portier allume la LED orange si la porte est ouverte. 
+Un appel est initialisé à destination du client distant en cas de pression sur la sonnette. 
+Lors de l’appel il est possible de composer un code DTMF. Si ce code correspond au mode de passe donné dans le fichier call.conf alors le portier ferme le contact de commande de la gâche pendant cinq secondes.
+Si un doigt est apposé sur le lecteur, il est comparé aux templates de la base de données. En cas de correspondance le portier ferme le contact de commande de la gâche pendant cinq secondes.
+Tous les événements sont reportés dans le fichier /Logs/mainlogs.
+
