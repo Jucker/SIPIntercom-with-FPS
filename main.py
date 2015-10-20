@@ -247,10 +247,8 @@ def identification():
 
 def initiateFps():
     """
-    Création de l'objet fps; changement de la vitesse; recréation de l'objet fps a la nouvelle vitesse
+    Création de l'objet fps
     """
-    fps =  FPS.FPS_GT511C3(device_name='/dev/ttyAMA0', baud=9600, timeout=2, is_com=False)
-    fps.ChangeBaudRate(115200)
     fps = FPS.FPS_GT511C3(device_name='/dev/ttyAMA0', baud=115200, timeout=2, is_com=False)
     fps.SetLED(False)
     fps.UseSerialDebug = False# Mettre à True pour afficher les bytes reçus et envoyés
