@@ -25,8 +25,7 @@ I have made some modifications to the original FPS library to imporve it and res
 - Modified the time management to "wait" befor getting bytes from the serial buffer
 
 A short manual (in french) is available in this repository (Manual_French.txt)
-Schematics (shematic)
-The full documentation (in french) is available in this repository
+Schematics (shematic.txt)
 
 Work well with my prototype.
 
