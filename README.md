@@ -29,6 +29,8 @@ Schematics (shematic.txt)
 
 Work well with my prototype.
 
+Use changeBaudBaudRate.py to change the FPS baudRate. Use it each time the FPS is power on
+
 Known issues:
 - SIP client send DNS queries twices
 - SIP client send INVITE and REGISTER without registration informations first, after error 407 response send it with all the informations. Mayby it's the desired behavior by the liblinphone library. Has pratically no incidence.
