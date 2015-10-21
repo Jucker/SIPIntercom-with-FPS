@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 '''
+Originaly
 Created on 21/03/2014
-
+by
 @author: Jean Machuca <correojean@gmail.com> @jeanmachuca
+
+modified version by Simon Jucker <simon.jucker@etml-es.ch> on october 2015
 '''
 
 import os
